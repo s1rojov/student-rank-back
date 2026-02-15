@@ -9,20 +9,15 @@ import {
   ParseIntPipe,
 } from '@nestjs/common';
 import { TournamentService } from './tournament.service';
+import { CreateTournamentDto } from '@/modules/tournament/dto/create-tournament.dto';
 
 @Controller('tournament')
 export class TournamentController {
   constructor(private readonly tournamentService: TournamentService) {}
 
-  @Post()
-  create(
-    @Body()
-    createTournamentDto: {
-      title: string;
-      startAt: string;
-      endAt: string;
-    },
-  ) {
+  @Post('Create')
+  create(@Body() createTournamentDto: CreateTournamentDto) {
+    // Klassni ko'rsating
     return this.tournamentService.create({
       title: createTournamentDto.title,
       startAt: new Date(createTournamentDto.startAt),
@@ -30,17 +25,18 @@ export class TournamentController {
     });
   }
 
-  @Get()
+  @Get('GetList')
   findAll() {
+    // return 'GEtlist';
     return this.tournamentService.findAll();
   }
 
-  @Get(':id')
+  @Get('Get/:id')
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.tournamentService.findOne(id);
   }
 
-  @Patch(':id')
+  @Patch('Update/:id')
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body()
@@ -59,7 +55,7 @@ export class TournamentController {
     return this.tournamentService.update(id, data);
   }
 
-  @Delete(':id')
+  @Delete('Delete/:id')
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.tournamentService.remove(id);
   }
