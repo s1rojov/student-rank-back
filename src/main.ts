@@ -7,7 +7,7 @@ async function bootstrap() {
 
   // CORS ni yoqish - frontend bilan ishlash uchun
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:4200',
+    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
     credentials: true,
   });
 
@@ -17,7 +17,7 @@ async function bootstrap() {
     .setDescription('Student Rank Api') // Tavsif
     .setVersion('1.0') // Versiya
     .addTag('studentrank') // Taglar (ixtiyoriy)
-    .addBearerAuth() // JWT authentication uchun
+    // .addBearerAuth() // JWT authentication uchun
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

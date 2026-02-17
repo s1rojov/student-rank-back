@@ -13,22 +13,22 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           Int      @id @default(autoincrement())
-  email        String   @unique
-  name         String?
-  picture      String?
-  googleId     String   @unique
-  accessToken  String?
-  refreshToken String?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-}
-
 model Tournament {
   id        Int      @id @default(autoincrement())
   title     String
   startAt   DateTime
   endAt     DateTime
+  createdAt DateTime @default(now())
+}
+
+model Status {
+  id        Int      @id @default(autoincrement())
+  title     String
+  createdAt DateTime @default(now())
+}
+
+model TournamentField {
+  id        Int      @id @default(autoincrement())
+  title     String
   createdAt DateTime @default(now())
 }
