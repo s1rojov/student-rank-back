@@ -5,11 +5,19 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // CORS ni yoqish - frontend bilan ishlash uchun
+  app.enableCors({
+    origin: process.env.FRONTEND_URL || 'http://localhost:4200',
+    credentials: true,
+  });
+
+  // Swagger konfiguratsiyasi
   const config = new DocumentBuilder()
     .setTitle('Student Rank') // Loyiha nomi
     .setDescription('Student Rank Api') // Tavsif
     .setVersion('1.0') // Versiya
     .addTag('studentrank') // Taglar (ixtiyoriy)
+    .addBearerAuth() // JWT authentication uchun
     .build();
 
   const document = SwaggerModule.createDocument(app, config);
