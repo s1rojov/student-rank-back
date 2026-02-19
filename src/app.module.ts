@@ -5,7 +5,8 @@ import { AppService } from './app.service';
 import { PrismaModule } from '@/prisma/prisma.module';
 import { TournamentModule } from '@/modules/tournament/tournament.module';
 import { StatusModule } from '@/modules/status/status.module';
-// import { AuthModule } from '@/modules/auth/auth.module';
+import { TournamentFieldModule } from '@/modules/tournament-field/tournament-field.module';
+import { AuthModule } from '@/modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -15,7 +16,8 @@ import { StatusModule } from '@/modules/status/status.module';
     PrismaModule,
     TournamentModule,
     StatusModule,
-    // AuthModule,
+    TournamentFieldModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
