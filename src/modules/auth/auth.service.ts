@@ -29,7 +29,7 @@ export class AuthService {
         { secret: process.env.RT_SECRET, expiresIn: '7d' },
       ),
     ]);
-    return { access_token: at, refresh_token: rt };
+    return { accessToken: at, refreshToken: rt };
   }
 
   // Registratsiya
@@ -52,7 +52,7 @@ export class AuthService {
       },
     });
     const tokens = await this.getTokens(newUser.id, newUser.email);
-    await this.updateRtHash(newUser.id, tokens.refresh_token);
+    await this.updateRtHash(newUser.id, tokens.refreshToken);
     return tokens;
   }
 
@@ -67,8 +67,14 @@ export class AuthService {
     if (!passwordMatches) throw new ForbiddenException('Access Denied');
 
     const tokens = await this.getTokens(user.id, user.email);
-    await this.updateRtHash(user.id, tokens.refresh_token);
-    return tokens;
+    await this.updateRtHash(user.id, tokens.refreshToken);
+    return {
+      id: user.id,
+      fullName: user.fullName,
+      phone: user.phone,
+      email: user.email,
+      ...tokens,
+    };
   }
 
   // Logout
@@ -89,7 +95,7 @@ export class AuthService {
     if (!rtMatches) throw new ForbiddenException('Access Denied');
 
     const tokens = await this.getTokens(user.id, user.email);
-    await this.updateRtHash(user.id, tokens.refresh_token);
+    await this.updateRtHash(user.id, tokens.refreshToken);
     return tokens;
   }
 

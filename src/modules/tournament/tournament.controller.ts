@@ -7,15 +7,20 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { TournamentService } from './tournament.service';
 import { CreateTournamentDto } from '@/modules/tournament/dto/create-tournament.dto';
+import { AtGuard } from '@/common/guards/at.guard';
+import { ApiBearerAuth } from '@nestjs/swagger';
 
 @Controller('tournament')
 export class TournamentController {
   constructor(private readonly tournamentService: TournamentService) {}
 
   @Post('Create')
+  @UseGuards(AtGuard)
+  @ApiBearerAuth()
   create(@Body() createTournamentDto: CreateTournamentDto) {
     // Klassni ko'rsating
     return this.tournamentService.create({
@@ -37,6 +42,8 @@ export class TournamentController {
   }
 
   @Patch('Update/:id')
+  @UseGuards(AtGuard)
+  @ApiBearerAuth()
   update(
     @Param('id', ParseIntPipe) id: number,
     @Body()
@@ -56,6 +63,8 @@ export class TournamentController {
   }
 
   @Delete('Delete/:id')
+  @UseGuards(AtGuard)
+  @ApiBearerAuth()
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.tournamentService.remove(id);
   }

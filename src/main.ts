@@ -15,7 +15,24 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:3000',
+    origin: (origin, callback) => {
+      const allowedOrigins = (
+        process.env.FRONTEND_URL || 'http://localhost:3000'
+      ).split(',');
+
+      // origin yo'q bo'lsa (masalan, Postman yoki server-to-server) — ruxsat
+      if (!origin) return callback(null, true);
+
+      // localhost yoki 127.0.0.1 dan kelgan barcha requestlarga ruxsat
+      if (
+        allowedOrigins.includes(origin) ||
+        /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin)
+      ) {
+        return callback(null, true);
+      }
+
+      return callback(new Error(`CORS: ruxsat yo'q origin: ${origin}`));
+    },
     credentials: true,
   });
 

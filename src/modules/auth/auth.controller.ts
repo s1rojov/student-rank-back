@@ -10,8 +10,8 @@ import {
 import { AuthService } from './auth.service';
 import { AuthDto } from './dto/auth.dto'; // Bu yerda email va password bor
 import { SignupDto } from './dto/signup.dto'; // Bu yerda fullName, phone, email, password bor
-import { AtGuard } from '../../common/guards/at.guard';
-import { RtGuard } from '../../common/guards/rt.guard';
+import { AtGuard } from '@/common/guards/at.guard';
+import { RtGuard } from '@/common/guards/rt.guard';
 import type { Request } from 'express';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 
