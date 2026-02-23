@@ -83,6 +83,7 @@ export class AuthService {
       where: { id: userId, refreshToken: { not: null } },
       data: { refreshToken: null },
     });
+    return true;
   }
 
   // Refresh
