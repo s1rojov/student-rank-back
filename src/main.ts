@@ -16,9 +16,9 @@ async function bootstrap() {
 
   app.enableCors({
     origin: (origin, callback) => {
-      const allowedOrigins = (
-        process.env.FRONTEND_URL || 'http://localhost:3000'
-      ).split(',');
+      const allowedOrigins = (process.env.FRONTEND_URL ||
+        'http://localhost:3000',
+      'https://student-rank-back-api.onrender.com/').split(',');
 
       // origin yo'q bo'lsa (masalan, Postman yoki server-to-server) — ruxsat
       if (!origin) return callback(null, true);
