@@ -44,28 +44,41 @@ model User {
 }
 
 model Test {
-  id        String     @id @default(uuid())
-  title     String
-  duration  Int // minutlarda
-  createdAt DateTime   @default(now())
-  questions Question[]
+  id          String     @id @default(uuid())
+  title       String
+  duration    Int // minutlarda
+  maxAttempts Int
+  createdAt   DateTime   @default(now())
+  questions   Question[]
+  attempts    Attempt[]
 }
 
 model Question {
-  id      String @id @default(uuid())
-  testId  String
-  text    String
-  options Json // ["A", "B", "C", "D"]
-  correct Int // 0,1,2,3
-  test    Test   @relation(fields: [testId], references: [id])
+  id           String @id @default(uuid())
+  testId       String
+  text         String
+  options      Json // ["A", "B", "C", "D"]
+  correctIndex Int // 0,1,2,3
+  test         Test   @relation(fields: [testId], references: [id])
+}
+
+enum AttemptStatus {
+  started
+  completed
+  expired
 }
 
 model Attempt {
-  id         String    @id @default(uuid())
-  userId     String
+  id         String        @id @default(uuid())
+  userId     Int
   testId     String
   attemptNo  Int
   score      Int?
-  startedAt  DateTime  @default(now())
+  startedAt  DateTime      @default(now())
   finishedAt DateTime?
+  status     AttemptStatus @default(started)
+
+  test Test @relation(fields: [testId], references: [id])
+
+  @@unique([userId, testId, attemptNo])
 }

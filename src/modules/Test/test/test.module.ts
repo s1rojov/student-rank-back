@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { TournamentService } from './tournament.service';
-import { TournamentController } from './tournament.controller';
+import { TestService } from './test.service';
+import { TestController } from './test.controller';
 import { PrismaService } from '@/prisma/prisma.service';
 
 @Module({
-  providers: [TournamentService, PrismaService],
-  controllers: [TournamentController],
+  providers: [TestService, PrismaService],
+  controllers: [TestController],
 })
-export class TournamentModule {}
+export class TestModule {}

@@ -7,6 +7,7 @@ import { TournamentModule } from '@/modules/tournament/tournament.module';
 import { StatusModule } from '@/modules/status/status.module';
 import { TournamentFieldModule } from '@/modules/tournament-field/tournament-field.module';
 import { AuthModule } from '@/modules/auth/auth.module';
+import { TestModule } from '@/modules/Test/test/test.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthModule } from '@/modules/auth/auth.module';
     StatusModule,
     TournamentFieldModule,
     AuthModule,
+    TestModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -3,69 +3,63 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
-  Delete,
-  ParseIntPipe,
+  ParseUUIDPipe,
+  Req,
   UseGuards,
 } from '@nestjs/common';
-import { TournamentService } from './tournament.service';
-import { CreateTournamentDto } from '@/modules/tournament/dto/create-tournament.dto';
-import { AtGuard } from '@/common/guards/at.guard';
+import type { Request } from 'express';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { AtGuard } from '@/common/guards/at.guard';
+import { TestService } from './test.service';
+import { SubmitTestDto } from './dto/submit-test.dto';
 
-@Controller('tournament')
-export class TournamentController {
-  constructor(private readonly tournamentService: TournamentService) {}
+@Controller('tests')
+export class TestController {
+  constructor(private readonly testService: TestService) {}
 
-  @Post('Create')
+  @Post(':testId/start')
   @UseGuards(AtGuard)
   @ApiBearerAuth()
-  create(@Body() createTournamentDto: CreateTournamentDto) {
-    // Klassni ko'rsating
-    return this.tournamentService.create({
-      title: createTournamentDto.title,
-      startAt: new Date(createTournamentDto.startAt),
-      endAt: new Date(createTournamentDto.endAt),
-    });
-  }
-
-  @Get('GetList')
-  findAll() {
-    // return 'GEtlist';
-    return this.tournamentService.findAll();
-  }
-
-  @Get('Get/:id')
-  findOne(@Param('id', ParseIntPipe) id: number) {
-    return this.tournamentService.findOne(id);
-  }
-
-  @Patch('Update/:id')
-  @UseGuards(AtGuard)
-  @ApiBearerAuth()
-  update(
-    @Param('id', ParseIntPipe) id: number,
-    @Body()
-    updateTournamentDto: {
-      title?: string;
-      startAt?: string;
-      endAt?: string;
-    },
+  startTest(
+    @Param('testId', ParseUUIDPipe) testId: string,
+    @Req() req: Request,
   ) {
-    const data: any = {};
-    if (updateTournamentDto.title) data.title = updateTournamentDto.title;
-    if (updateTournamentDto.startAt)
-      data.startAt = new Date(updateTournamentDto.startAt);
-    if (updateTournamentDto.endAt)
-      data.endAt = new Date(updateTournamentDto.endAt);
-    return this.tournamentService.update(id, data);
+    const user = req.user as any;
+    return this.testService.startTest(testId, Number(user['sub']));
   }
 
-  @Delete('Delete/:id')
+  @Get(':testId/attempt/:attemptId/questions')
   @UseGuards(AtGuard)
   @ApiBearerAuth()
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.tournamentService.remove(id);
+  getAttemptQuestions(
+    @Param('testId', ParseUUIDPipe) testId: string,
+    @Param('attemptId', ParseUUIDPipe) attemptId: string,
+    @Req() req: Request,
+  ) {
+    const user = req.user as any;
+    return this.testService.getAttemptQuestions(
+      testId,
+      attemptId,
+      Number(user['sub']),
+    );
+  }
+
+  @Post(':testId/attempt/:attemptId/submit')
+  @UseGuards(AtGuard)
+  @ApiBearerAuth()
+  submitTest(
+    @Param('testId', ParseUUIDPipe) testId: string,
+    @Param('attemptId', ParseUUIDPipe) attemptId: string,
+    @Req() req: Request,
+    @Body() dto: SubmitTestDto,
+  ) {
+    const user = req.user as any;
+    return this.testService.submitTest(
+      testId,
+      attemptId,
+      Number(user['sub']),
+      dto,
+    );
   }
 }
